@@ -1,0 +1,29 @@
+{
+  "compilerOptions": {
+    // Estructura del proyecto
+    "rootDir": "./src",
+    "outDir": "./dist",
+
+    // Configuración del entorno
+    "target": "ES2020",
+    "module": "CommonJS",
+    "lib": ["ES2020"],
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+
+    // Tipado y desarrollo
+    "strict": true,
+    "types": ["node"],
+    "sourceMap": true,
+    "declaration": true,
+    "declarationMap": true,
+
+    // Limpieza y estilo
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+    "skipLibCheck": true
+  },
+  "include": ["src"],
+  "exclude": ["node_modules"]
+}
