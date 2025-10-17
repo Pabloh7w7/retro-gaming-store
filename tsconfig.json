@@ -1,8 +1,8 @@
 {
   "compilerOptions": {
     // Estructura del proyecto
-    "rootDir": "./src",
-    "outDir": "./dist",
+    "rootDir": "src",
+    "outDir": "dist",
 
     // Configuración del entorno
     "target": "ES2020",
