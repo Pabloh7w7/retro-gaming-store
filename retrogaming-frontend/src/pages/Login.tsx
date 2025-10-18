@@ -7,22 +7,23 @@ function Login() {
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
-  const handleLogin = async () => {
-    try {
-      const res = await axios.post('http://localhost:3000/login', {
-        email,
-        password
-      });
+ const handleLogin = async () => {
+  try {
+    const api = import.meta.env.VITE_API_URL;
+    const res = await axios.post(`${api}/login`, {
+      email,
+      password
+    });
 
-      const token = res.data.token;
-      localStorage.setItem('authToken', token);
-      alert('Inicio de sesión exitoso');
-      navigate('/');
-    } catch (err) {
-      console.error('Error al iniciar sesión:', err);
-      alert('Credenciales incorrectas o error de servidor');
-    }
-  };
+    const token = res.data.token;
+    localStorage.setItem('authToken', token);
+    alert('Inicio de sesión exitoso');
+    navigate('/');
+  } catch (err) {
+    console.error('Error al iniciar sesión:', err);
+    alert('Credenciales incorrectas o error de servidor');
+  }
+};
 
   return (
     <div className="max-w-md mx-auto mt-20 p-6 border rounded shadow">

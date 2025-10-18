@@ -15,11 +15,12 @@ function Checkout() {
   const [products, setProducts] = useState<Product[]>([]);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    axios.get('http://localhost:3000/products')
-      .then((res) => setProducts(res.data))
-      .catch((err) => console.error('Error al cargar productos:', err));
-  }, []);
+useEffect(() => {
+  const api = import.meta.env.VITE_API_URL;
+  axios.get(`${api}/products`)
+    .then((res) => setProducts(res.data))
+    .catch((err) => console.error('Error al cargar productos:', err));
+}, []);
 
   const getProduct = (id: number) => products.find(p => p.id === id);
 

@@ -20,18 +20,19 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
-    const token = localStorage.getItem('authToken');
-    if (token) {
-      axios.get('http://localhost:3000/me', {
-        headers: { Authorization: `Bearer ${token}` }
-      }).then(res => {
-        setUser(res.data);
-      }).catch(() => {
-        localStorage.removeItem('authToken');
-        setUser(null);
-      });
-    }
-  }, []);
+  const token = localStorage.getItem('authToken');
+  if (token) {
+    const api = import.meta.env.VITE_API_URL;
+    axios.get(`${api}/me`, {
+      headers: { Authorization: `Bearer ${token}` }
+    }).then(res => {
+      setUser(res.data);
+    }).catch(() => {
+      localStorage.removeItem('authToken');
+      setUser(null);
+    });
+  }
+}, []);
 
   const logout = () => {
     localStorage.removeItem('authToken');

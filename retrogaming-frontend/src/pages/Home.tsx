@@ -18,11 +18,12 @@ function Home() {
   const [searchTerm, setSearchTerm] = useState<string>('');
   const { addToCart } = useCart();
 
-  useEffect(() => {
-    axios.get('http://localhost:3000/products')
-      .then((res) => setProducts(res.data))
-      .catch((err) => console.error('Error al cargar productos:', err));
-  }, []);
+useEffect(() => {
+  const api = import.meta.env.VITE_API_URL;
+  axios.get(`${api}/products`)
+    .then((res) => setProducts(res.data))
+    .catch((err) => console.error('Error al cargar productos:', err));
+}, []);
 
   const categories = ['Todos', ...Array.from(new Set(products.map(p => p.category)))];
 

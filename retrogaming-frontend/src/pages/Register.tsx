@@ -8,23 +8,24 @@ function Register() {
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
-  const handleRegister = async () => {
-    try {
-      const res = await axios.post('http://localhost:3000/register', {
-        name,
-        email,
-        password
-      });
+const handleRegister = async () => {
+  try {
+    const api = import.meta.env.VITE_API_URL;
+    const res = await axios.post(`${api}/register`, {
+      name,
+      email,
+      password
+    });
 
-      const token = res.data.token;
-      localStorage.setItem('authToken', token);
-      alert('Registro exitoso. ¡Bienvenido!');
-      navigate('/');
-    } catch (err) {
-      console.error('Error al registrar usuario:', err);
-      alert('No se pudo completar el registro');
-    }
-  };
+    const token = res.data.token;
+    localStorage.setItem('authToken', token);
+    alert('Registro exitoso. ¡Bienvenido!');
+    navigate('/');
+  } catch (err) {
+    console.error('Error al registrar usuario:', err);
+    alert('No se pudo completar el registro');
+  }
+};
 
   return (
     <div className="max-w-md mx-auto mt-20 p-6 border rounded shadow">

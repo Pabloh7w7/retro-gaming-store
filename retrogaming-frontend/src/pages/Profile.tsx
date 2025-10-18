@@ -28,12 +28,14 @@ function Profile() {
     const token = localStorage.getItem('authToken');
     if (!token) return;
 
-    axios.get('http://localhost:3000/orders', {
-      headers: { Authorization: `Bearer ${token}` }
-    }).then(res => setOrders(res.data));
+    const api = import.meta.env.VITE_API_URL;
 
-    axios.get('http://localhost:3000/products')
-      .then(res => setProducts(res.data));
+axios.get(`${api}/orders`, {
+  headers: { Authorization: `Bearer ${token}` }
+}).then(res => setOrders(res.data));
+
+axios.get(`${api}/products`)
+  .then(res => setProducts(res.data));
   }, []);
 
   const getProduct = (id: number) => products.find(p => p.id === id);
