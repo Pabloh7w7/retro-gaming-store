@@ -30,18 +30,19 @@ useEffect(() => {
   }, 0);
 
   const handleCheckout = () => {
-    axios.post('http://localhost:3000/orders', {
-      items: cart,
-      total
-    }).then(() => {
-      clearCart();
-      alert('¡Compra realizada con éxito!');
-      navigate('/success');
-    }).catch((err) => {
-      console.error('Error al finalizar compra:', err);
-      alert('Hubo un problema al procesar tu orden.');
-    });
-  };
+  const api = import.meta.env.VITE_API_URL;
+  axios.post(`${api}/orders`, {
+    items: cart,
+    total
+  }).then(() => {
+    clearCart();
+    alert('¡Compra realizada con éxito!');
+    navigate('/success');
+  }).catch((err) => {
+    console.error('Error al finalizar compra:', err);
+    alert('Hubo un problema al procesar tu orden.');
+  });
+};
 
   return (
     <div className="p-4">

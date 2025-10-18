@@ -25,18 +25,18 @@ function Profile() {
   const [products, setProducts] = useState<Product[]>([]);
 
   useEffect(() => {
-    const token = localStorage.getItem('authToken');
-    if (!token) return;
+  const token = localStorage.getItem('authToken');
+  if (!token) return;
 
-    const api = import.meta.env.VITE_API_URL;
+  const api = import.meta.env.VITE_API_URL;
 
-axios.get(`${api}/orders`, {
-  headers: { Authorization: `Bearer ${token}` }
-}).then(res => setOrders(res.data));
+  axios.get(`${api}/orders`, {
+    headers: { Authorization: `Bearer ${token}` }
+  }).then(res => setOrders(res.data));
 
-axios.get(`${api}/products`)
-  .then(res => setProducts(res.data));
-  }, []);
+  axios.get(`${api}/products`)
+    .then(res => setProducts(res.data));
+}, []);
 
   const getProduct = (id: number) => products.find(p => p.id === id);
 
