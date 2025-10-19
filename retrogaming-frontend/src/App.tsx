@@ -8,6 +8,7 @@ import Login from './pages/Login';
 import Navbar from './components/Navbar';
 import Register from './pages/Register';
 import Profile from './pages/Profile';
+import Success from './pages/Success';
 
 function App() {
   return (
@@ -20,8 +21,8 @@ function App() {
         <Route path="/success" element={<OrderSuccess />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/profile" element={<PrivateRoute><Profile /></PrivateRoute>
-} />
+        <Route path="/profile" element={<PrivateRoute><Profile /></PrivateRoute>} />
+        <Route path="/success" element={<Success />} />
       </Routes>
     </BrowserRouter>
   );

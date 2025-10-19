@@ -3,35 +3,34 @@ import { pool } from '../config/db';
 import { CartItem } from '../models/cartItem';
 
 export const addToCart = async (req: Request, res: Response) => {
-  const { product_id, quantity }: CartItem = req.body;
+  const { product_id, quantity } = req.body;
+  const user_id = req.user?.id;
+
   try {
     const conn = await pool.getConnection();
-    const result = await conn.query(
-      'INSERT INTO cart_items (product_id, quantity) VALUES (?, ?)',
-      [product_id, quantity]
+    await conn.query(
+      'INSERT INTO cart_items (product_id, quantity, user_id) VALUES (?, ?, ?)',
+      [product_id, quantity, user_id]
     );
     conn.release();
-    res.status(201).json({
-      id: Number(result.insertId),
-      product_id,
-      quantity
-    });
+    res.status(201).json({ message: 'Producto agregado al carrito' });
   } catch (err) {
     console.error('Error al agregar al carrito:', err);
     res.status(500).json({ error: 'Error al agregar al carrito' });
   }
 };
 
-export const getCartItems = async (_req: Request, res: Response) => {
+export const getCartItems = async (req: Request, res: Response) => {
+  const user_id = req.user?.id;
+
   try {
     const conn = await pool.getConnection();
-    const rows = await conn.query(`
-      SELECT ci.id, p.name, p.price, ci.quantity, (p.price * ci.quantity) AS subtotal
-      FROM cart_items ci
-      JOIN products p ON ci.product_id = p.id
-    `);
+    const [items] = await conn.query(
+      'SELECT * FROM cart_items WHERE user_id = ?',
+      [user_id]
+    );
     conn.release();
-    res.json(rows);
+    res.json(items);
   } catch (err) {
     console.error('Error al obtener el carrito:', err);
     res.status(500).json({ error: 'Error al obtener el carrito' });
