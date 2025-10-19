@@ -10,15 +10,22 @@ const Checkout = () => {
 
   const handleCheckout = async () => {
     try {
+      const token = localStorage.getItem('token');
+
       const res = await axios.post(`${api}/order/checkout`, {
         nombre,
         direccion,
-        productos: [],
+        productos: [], // Aquí puedes conectar el carrito real
+      }, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       });
+
       console.log('Orden enviada:', res.data);
       setConfirmado(true);
     } catch (err) {
-      console.error('Error al procesar la orden:', err);
+      console.error('❌ Error al procesar la orden:', err);
     }
   };
 
