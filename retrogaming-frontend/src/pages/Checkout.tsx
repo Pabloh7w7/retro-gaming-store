@@ -15,10 +15,10 @@ const Checkout = () => {
         direccion,
         productos: [],
       });
-      console.log('✅ Orden enviada:', res.data);
+      console.log('Orden enviada:', res.data);
       setConfirmado(true);
     } catch (err) {
-      console.error('❌ Error al procesar la orden:', err);
+      console.error('Error al procesar la orden:', err);
     }
   };
 
