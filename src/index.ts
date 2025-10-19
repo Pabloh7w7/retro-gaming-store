@@ -8,7 +8,11 @@ import orderRoutes from './routes/order';
 
 const app = express();
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+  origin: ['https://retro-gaming-store-rho.vercel.app'], // tu dominio en Vercel
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  credentials: true,
+}));
 
 app.use('/products', productsRoutes);
 app.use('/cart', cartRoutes);
