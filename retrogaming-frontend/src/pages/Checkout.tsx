@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const api = import.meta.env.VITE_API_URL;
 
@@ -7,25 +8,36 @@ const Checkout = () => {
   const [nombre, setNombre] = useState('');
   const [direccion, setDireccion] = useState('');
   const [confirmado, setConfirmado] = useState(false);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      alert("Debes iniciar sesión para continuar.");
+      navigate('/login');
+    }
+  }, []);
 
   const handleCheckout = async () => {
-    try {
-      const token = localStorage.getItem('token');
+    const token = localStorage.getItem('token');
+    if (!token) return;
 
+    try {
       const res = await axios.post(`${api}/order/checkout`, {
         nombre,
         direccion,
-        productos: [], // Aquí puedes conectar el carrito real
+        productos: [], // conecta con tu carrito real
       }, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
 
-      console.log('Orden enviada:', res.data);
+      console.log('✅ Orden enviada:', res.data);
       setConfirmado(true);
     } catch (err) {
       console.error('❌ Error al procesar la orden:', err);
+      alert("Error al procesar la orden. Verifica tu sesión.");
     }
   };
 

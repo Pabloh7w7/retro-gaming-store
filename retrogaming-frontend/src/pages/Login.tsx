@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const api = import.meta.env.VITE_API_URL;
 
@@ -7,19 +8,16 @@ const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const navigate = useNavigate();
 
   const handleLogin = async () => {
     try {
       const res = await axios.post(`${api}/auth/login`, { email, password });
 
-      console.log('✅ Login exitoso:', res.data);
-
-      // Validar que el token exista
       if (res.data.token) {
         localStorage.setItem('token', res.data.token);
-        setError('');
         alert('Inicio de sesión exitoso');
-        // Aquí podrías redirigir al usuario si lo deseas
+        navigate('/checkout'); // o redirige a donde quieras
       } else {
         setError('No se recibió token. Verifica el backend.');
       }
