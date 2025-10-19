@@ -13,37 +13,36 @@ export const loginUser = async (req: Request, res: Response) => {
 
   try {
     const conn = await pool.getConnection();
-    const [user] = await conn.query('SELECT * FROM users WHERE email = ?', [email]);
+    const [rows] = await conn.query('SELECT * FROM users WHERE email = ?', [email]);
     conn.release();
 
-    if (!user || (user as any[]).length === 0) {
+    if (!rows || rows.length === 0) {
       return res.status(401).json({ error: 'Usuario no encontrado' });
     }
 
-    const isMatch = await bcrypt.compare(password, (user as any[])[0].password);
+    const user = rows[0];
+    const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       return res.status(401).json({ error: 'Contraseña incorrecta' });
     }
 
-    const token = jwt.sign(
-      { id: (user as any[])[0].id, username: (user as any[])[0].username },
-      secret,
-      { expiresIn: '2h' }
-    );
+    const token = jwt.sign({ id: user.id, username: user.username }, secret, { expiresIn: '2h' });
 
     res.json({
       message: 'Login exitoso',
       token,
       user: {
-        id: (user as any[])[0].id,
-        username: (user as any[])[0].username,
-        email: (user as any[])[0].email
-      }
+        id: user.id,
+        username: user.username,
+        email: user.email,
+      },
     });
   } catch (err) {
+    console.error('❌ Error en login:', err);
     res.status(500).json({ error: 'Error al iniciar sesión' });
   }
 };
+
 
 export const registerUser = async (req: Request, res: Response) => {
   const { username, email, password } = req.body;
