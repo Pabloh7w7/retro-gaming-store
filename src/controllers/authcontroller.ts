@@ -44,3 +44,39 @@ export const loginUser = async (req: Request, res: Response) => {
     res.status(500).json({ error: 'Error al iniciar sesión' });
   }
 };
+
+export const registerUser = async (req: Request, res: Response) => {
+  const { username, email, password } = req.body;
+  const secret = process.env.JWT_SECRET;
+
+  if (!secret) {
+    throw new Error('JWT_SECRET no está definido');
+  }
+
+  try {
+    const conn = await pool.getConnection();
+
+    const [existing] = await conn.query('SELECT * FROM users WHERE email = ?', [email]);
+    if ((existing as any[]).length > 0) {
+      conn.release();
+      return res.status(409).json({ error: 'El correo ya está registrado' });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+    await conn.query(
+      'INSERT INTO users (username, email, password) VALUES (?, ?, ?)',
+      [username, email, hashedPassword]
+    );
+    conn.release();
+
+    const token = jwt.sign({ username, email }, secret, { expiresIn: '2h' });
+
+    res.status(201).json({
+      message: 'Usuario registrado exitosamente',
+      token,
+      user: { username, email }
+    });
+  } catch (err) {
+    res.status(500).json({ error: 'Error al registrar usuario' });
+  }
+};
