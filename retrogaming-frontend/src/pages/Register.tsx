@@ -10,7 +10,7 @@ const Register = () => {
 
   const handleRegister = async () => {
     try {
-      const res = await axios.post(`${api}/auth/register`, {
+      const res = await axios.post(`${api}/pages/register`, {
         username,
         email,
         password,

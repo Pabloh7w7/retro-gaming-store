@@ -23,7 +23,7 @@ const Checkout = () => {
     if (!token) return;
 
     try {
-      const res = await axios.post(`${api}/order/checkout`, {
+      const res = await axios.post(`${api}/pages/checkout`, {
         nombre,
         direccion,
         productos: [], // conecta con tu carrito real
